@@ -15,8 +15,9 @@ A REST style API and server can be found from another repository, [clamav-rest](
 
 Code is self explanatory. Something like this is the idea:
 
+## Http Client
 ```
-  ClamAVClient cl = new ClamAVClient("192.168.50.72", 3310);
+  ClamAVClient cl = new ClamAVClient("192.168.50.72", 3310); // ClamAVClient(String hostname, int port)
   byte[] reply;
   try {
     reply = cl.scan(input);
@@ -26,47 +27,23 @@ Code is self explanatory. Something like this is the idea:
   if (!ClamAVClient.isCleanReply(reply)) {
    throw new Exception("aaargh. Something was found");
   }
+```  
+
+## Unix Socket Client
 ```
+  ClamAVClient cl = new ClamAVClient(unixSocket); // ClamAVClient(File unixSocket)
+  byte[] reply;
+  try {
+    reply = cl.scan(input);
+  } catch (Exception e) {
+    throw new RuntimeException("Could not scan the input: " + e.getMessage());
+  }
 
-# Maven dependency
-
+  if (!clamAVClient.isCleanReply(reply)) {
+    throw new Exception("aaargh. Something was found");
+  }
+  
 ```
-<dependency>
-  <groupId>fi.solita.clamav</groupId>
-  <artifactId>clamav-client</artifactId>
-  <version>1.0.1</version>
-</dependency>
-```
-
-# Creating the jar
-
-```
-mvn install
-```
-
-# Testing the client
-
-To run the automated tests you are assumed to run the clamd in a local virtual machine. 
-Configuration for [Vagrant](http://www.vagrantup.com/) and [Oracle Virtualbox](https://www.virtualbox.org/) is provided.
-
-To start test server simply
-
-```
-cd vagrant
-vagrant up clamav
-```
-
-This will kick up a CentOS virtual machine and install [ClamAV](http://www.clamav.net/) in it.
-
-Alternatively, you could use Docker image to run ClamAV. Automated tests with Travis CI run using [Docker image for ClamAV](https://hub.docker.com/r/lokori/clamav-java/). The test image runs with artificially low MaxStreamLength setting on purpose.
-
-## Contributors
-
-* [Antti Virtanen](https://github.com/lokori)
-* [Ari Ruotsalainen](https://github.com/ruoat)
-* [Heikki Hokkanen](https://github.com/hoxu)
-* [Henrik Alstad](https://github.com/drogin)
-
 
 # License
 
